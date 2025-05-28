@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Promo Spesial - Produk Hebat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #e9e6e6;
+    }
+    header {
+      background: linear-gradient(120deg, #ff6a00, #422905);
+      color: white;
+      text-align: center;
+      padding: 80px 20px;
+    }
+    header h1 {
+      font-size: 2.5em;
+    }
+    nav {
+      background: #131111;
+      text-align: center;
+      position: sticky;
+      top: 0;
+    }
+    nav a {
+      display: inline-block;
+      color: white;
+      padding: 15px 20px;
+      text-decoration: none;
+    }
+    nav a:hover {
+      background: #555;
+    }
+    section {
+      padding: 60px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .cta {
+      text-align: center;
+      background-color: #84620d;
+      padding: 40px 20px;
+      border-radius: 10px;
+      margin: 30px auto;
+    }
+    .cta a {
+      background: #ff6a00;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 1.2em;
+    }
+    .features, .testimoni {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 20px;
+    }
+    .card {
+      background: #f1efefc6;
+      padding: 20px;
+      border-radius: 8px;
+      flex: 1 1 250px;
+      box-shadow: 0 2px 5px rgba(192, 73, 100, 0.1);
+    }
+    footer {
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#beranda">Beranda</a>
+    <a href="#fitur">Fitur</a>
+    <a href="#testimoni">Testimoni</a>
+    <a href="#promo">Promo</a>
+    <a href="#kontak">Kontak</a>
+  </nav>
+
+  <header id="beranda">
+    <h1>Promo Terbatas! Dari Nopal sidqi</h1>
+    <p>Produk Hebat ,no minus ,masih baik,masih berfungsi,dengan Harga Terbaik Hanya Kemarin</p>
+  </header>
+
+  <section class="cta">
+    <h2>Dapatkan Diskon 0,99% Sekarang!</h2>
+    <p>Promo hanya berlaku sampai <strong>KIAMAT setelah kiamat gratis</strong></p>
+    <a href="#kontak">Pesan Sekarang</a>
+  </section>
+
+  <section id="fitur">
+    <h2>Kenapa Memilih Produk Ini?</h2>
+    <div class="features">
+      <div class="card">
+        <h3>Inovatif</h3>
+        <p>Didesain dengan teknologi terkini untuk kemudahan Anda.</p>
+      </div>
+      <div class="card">
+        <h3>Terjangkau</h3>
+        <p>Harga bersaing, nilai luar biasa untuk kebutuhan Anda.</p>
+      </div>
+      <div class="card">
+        <h3>Garansi</h3>
+        <p>Garansi resmi 1 jam dan dukungan penuh dari tim kami.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimoni">
+    <h2>Apa Kata Mereka?</h2>
+    <div class="testimoni">
+      <div class="card">
+        <p>"Produk ini sangat membantu bisnis saya. Pelayanan cepat dan profesional!"</p>
+        <strong>- Agus, Jogja</strong>
+      </div>
+      <div class="card">
+        <p>"Saya tidak menyangka kualitasnya setinggi ini dengan harga yang sangat terjangkau."</p>
+        <strong>- agus elektrik, papua</strong>
+      </div>
+    </div>
+  </section>
+
+  <section id="promo">
+    <h2>Detail Promo</h2>
+    <p>Promo spesial hanya berlaku untuk pemesanan melalui halaman ini. Dapatkan:</p>
+    <ul>
+      <li>Diskon 50% dari harga normal</li>
+      <li>Gratis ongkir seluruh Indonesia</li>
+      <li>Bonus eBook eksklusif</li>
+    </ul>
+  </section>
+
+  <section id="kontak">
+    <h2>Pesan Sekarang</h2>
+    <form action="#" method="post">
+      <label for="nama">Nama:</label>
+      <input type="text" id="nama" name="nama" required>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      <label for="pesan">Pesan atau Permintaan Khusus:</label>
+      <textarea id="pesan" name="pesan" rows="5"></textarea>
+      <input type="submit" value="Kirim Pesanan">
+    </form>
+  </section>
+
+  <footer>
+    &copy; 2025 PromoHebat.id — Semua Hak Dilindungi.
+  </footer>
+
+</body>
+</html>
