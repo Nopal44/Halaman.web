@@ -1,163 +1,226 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Promo Spesial - Produk Hebat</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Nopal</title>
   <style>
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      background-color: #e9e6e6;
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
     }
     header {
-      background: linear-gradient(120deg, #ff6a00, #422905);
-      color: white;
-      text-align: center;
-      padding: 80px 20px;
-    }
-    header h1 {
-      font-size: 2.5em;
-    }
-    nav {
-      background: #131111;
-      text-align: center;
-      position: sticky;
-      top: 0;
-    }
-    nav a {
-      display: inline-block;
+      background-color: #4267B2;
       color: white;
       padding: 15px 20px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+    nav {
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 10px 0;
+    }
+    nav a {
       text-decoration: none;
+      color: #4267B2;
+      font-weight: bold;
+      padding: 8px 15px;
+      border-radius: 6px;
     }
     nav a:hover {
-      background: #555;
+      background-color: #e6e6e6;
     }
-    section {
-      padding: 60px 20px;
-      max-width: 1000px;
-      margin: auto;
-    }
-    .cta {
-      text-align: center;
-      background-color: #84620d;
-      padding: 40px 20px;
-      border-radius: 10px;
-      margin: 30px auto;
-    }
-    .cta a {
-      background: #ff6a00;
-      color: white;
-      padding: 15px 25px;
-      border-radius: 5px;
-      text-decoration: none;
-      font-size: 1.2em;
-    }
-    .features, .testimoni {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      gap: 20px;
-    }
-    .card {
-      background: #f1efefc6;
+    .auth-container, .content {
+      max-width: 500px;
+      margin: 40px auto;
+      background: white;
       padding: 20px;
       border-radius: 8px;
-      flex: 1 1 250px;
-      box-shadow: 0 2px 5px rgba(192, 73, 100, 0.1);
     }
-    footer {
-      background: #222;
+    input, textarea, button {
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #4267B2;
       color: white;
-      text-align: center;
-      padding: 30px 20px;
-      margin-top: 40px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
     }
+    .toggle {
+      color: #333;
+      text-align: center;
+      margin-top: 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .post {
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+      position: relative;
+    }
+    .post small { color: gray; }
+    .delete-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    #navbar-section { display: none; }
   </style>
 </head>
-<body>
+<body><header id="navbar-section">DZAKI Media</header>
+<nav id="menu-nav" style="display:none;">
+  <a href="#" onclick="showPage('beranda')">Beranda</a>
+  <a href="#" onclick="showPage('profil')">Profil</a>
+  <a href="#" onclick="showPage('pesan')">Pesan</a>
+  <a href="#" onclick="showPage('cari')">Cari Pengguna</a>
+  <a href="#" onclick="logout()">Logout</a>
+</nav><div id="auth-page" class="auth-container">
+  <h2 id="form-title">Login</h2>
+  <input type="text" id="username" placeholder="Username" required>
+  <input type="email" id="email" placeholder="Email" required>
+  <input type="password" id="password" placeholder="Password" required>
+  <button onclick="handleAuth()">Masuk</button>
+  <div class="toggle" onclick="toggleForm()">Belum punya akun? Daftar di sini</div>
+</div><div class="content" id="beranda-section" style="display:none;">
+  <h3>Buat Postingan</h3>
+  <textarea id="postText" placeholder="Tulis sesuatu..."></textarea>
+  <button onclick="buatPosting()">Posting</button>
+  <div id="posts-area" style="margin-top:20px;"></div>
+</div><div class="content" id="profil-section" style="display:none;">
+  <h3>Profil Pengguna</h3>
+  <input type="file" accept="image/*" onchange="uploadFotoProfil(event)">
+  <img id="fotoProfil" src="" style="max-width:100%; margin-top:10px; display:none;">
+</div><div class="content" id="pesan-section" style="display:none;">
+  <h3>Pesan</h3>
+  <textarea id="balasPesan" placeholder="Tulis balasan pesan..."></textarea>
+  <button onclick="kirimPesan()">Kirim</button>
+  <div id="daftarPesan"></div>
+</div><div class="content" id="cari-section" style="display:none;">
+  <h3>Cari Pengguna</h3>
+  <input type="text" id="searchUser" placeholder="Masukkan nama pengguna..." oninput="cariPengguna()">
+  <ul id="hasilCari"></ul>
+</div><script>
+  let isLogin = true;
+  let usernameGlobal = "";
 
-  <nav>
-    <a href="#beranda">Beranda</a>
-    <a href="#fitur">Fitur</a>
-    <a href="#testimoni">Testimoni</a>
-    <a href="#promo">Promo</a>
-    <a href="#kontak">Kontak</a>
-  </nav>
+  function toggleForm() {
+    isLogin = !isLogin;
+    document.getElementById("form-title").innerText = isLogin ? "Login" : "Registrasi";
+    document.querySelector(".toggle").innerText = isLogin ? "Belum punya akun? Daftar di sini" : "Sudah punya akun? Login di sini";
+  }
 
-  <header id="beranda">
-    <h1>Promo Terbatas! Dari Nopal sidqi</h1>
-    <p>Produk Hebat ,no minus ,masih baik,masih berfungsi,dengan Harga Terbaik Hanya Kemarin</p>
-  </header>
+  function handleAuth() {
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    if (!username || !email || !password) return alert("Isi semua kolom.");
 
-  <section class="cta">
-    <h2>Dapatkan Diskon 0,99% Sekarang!</h2>
-    <p>Promo hanya berlaku sampai <strong>KIAMAT setelah kiamat gratis</strong></p>
-    <a href="#kontak">Pesan Sekarang</a>
-  </section>
+    const user = { username, email, password };
 
-  <section id="fitur">
-    <h2>Kenapa Memilih Produk Ini?</h2>
-    <div class="features">
-      <div class="card">
-        <h3>Inovatif</h3>
-        <p>Didesain dengan teknologi terkini untuk kemudahan Anda.</p>
-      </div>
-      <div class="card">
-        <h3>Terjangkau</h3>
-        <p>Harga bersaing, nilai luar biasa untuk kebutuhan Anda.</p>
-      </div>
-      <div class="card">
-        <h3>Garansi</h3>
-        <p>Garansi resmi 1 jam dan dukungan penuh dari tim kami.</p>
-      </div>
-    </div>
-  </section>
+    if (isLogin) {
+      const saved = JSON.parse(localStorage.getItem("user"));
+      if (saved && saved.email === email && saved.password === password) {
+        usernameGlobal = saved.username;
+        showSocialPage();
+      } else {
+        alert("Email atau password salah.");
+      }
+    } else {
+      localStorage.setItem("user", JSON.stringify(user));
+      alert("Registrasi berhasil! Silakan login.");
+      toggleForm();
+    }
+  }
 
-  <section id="testimoni">
-    <h2>Apa Kata Mereka?</h2>
-    <div class="testimoni">
-      <div class="card">
-        <p>"Produk ini sangat membantu bisnis saya. Pelayanan cepat dan profesional!"</p>
-        <strong>- Agus, Jogja</strong>
-      </div>
-      <div class="card">
-        <p>"Saya tidak menyangka kualitasnya setinggi ini dengan harga yang sangat terjangkau."</p>
-        <strong>- agus elektrik, papua</strong>
-      </div>
-    </div>
-  </section>
+  function showSocialPage() {
+    document.getElementById("auth-page").style.display = "none";
+    document.getElementById("navbar-section").style.display = "block";
+    document.getElementById("menu-nav").style.display = "flex";
+    showPage('beranda');
+  }
 
-  <section id="promo">
-    <h2>Detail Promo</h2>
-    <p>Promo spesial hanya berlaku untuk pemesanan melalui halaman ini. Dapatkan:</p>
-    <ul>
-      <li>Diskon 50% dari harga normal</li>
-      <li>Gratis ongkir seluruh Indonesia</li>
-      <li>Bonus eBook eksklusif</li>
-    </ul>
-  </section>
+  function logout() {
+    location.reload();
+  }
 
-  <section id="kontak">
-    <h2>Pesan Sekarang</h2>
-    <form action="#" method="post">
-      <label for="nama">Nama:</label>
-      <input type="text" id="nama" name="nama" required>
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required>
-      <label for="pesan">Pesan atau Permintaan Khusus:</label>
-      <textarea id="pesan" name="pesan" rows="5"></textarea>
-      <input type="submit" value="Kirim Pesanan">
-    </form>
-  </section>
+  function showPage(page) {
+    ['beranda', 'profil', 'pesan', 'cari'].forEach(p => {
+      document.getElementById(`${p}-section`).style.display = (p === page ? 'block' : 'none');
+    });
+  }
 
-  <footer>
-    &copy; 2025 PromoHebat.id — Semua Hak Dilindungi.
-  </footer>
+  function buatPosting() {
+    const teks = document.getElementById("postText").value.trim();
+    if (!teks) return alert("Tulis sesuatu dulu.");
+    const waktu = new Date().toLocaleString();
+    const postId = "post-" + Date.now();
+    const postDiv = document.createElement("div");
+    postDiv.className = "post";
+    postDiv.id = postId;
+    postDiv.innerHTML = `
+      <button class="delete-btn" onclick="hapusPosting('${postId}')">Hapus</button>
+      <strong>${usernameGlobal}</strong><br>
+      <small>${waktu}</small>
+      <p>${teks}</p>
+    `;
+    const area = document.getElementById("posts-area");
+    area.insertBefore(postDiv, area.firstChild);
+    document.getElementById("postText").value = "";
+  }
 
-</body>
+  function hapusPosting(id) {
+    if (confirm("Yakin ingin menghapus postingan ini?")) {
+      document.getElementById(id).remove();
+    }
+  }
+
+  function uploadFotoProfil(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = document.getElementById("fotoProfil");
+      img.src = e.target.result;
+      img.style.display = 'block';
+    }
+    reader.readAsDataURL(file);
+  }
+
+  function cariPengguna() {
+    const keyword = document.getElementById("searchUser").value.toLowerCase();
+    const user = JSON.parse(localStorage.getItem("user"));
+    const hasil = document.getElementById("hasilCari");
+    hasil.innerHTML = "";
+    if (user && user.username.toLowerCase().includes(keyword)) {
+      hasil.innerHTML = `<li>${user.username}</li>`;
+    }
+  }
+
+  function kirimPesan() {
+    const isi = document.getElementById("balasPesan").value.trim();
+    if (!isi) return;
+    const pesan = document.createElement("div");
+    pesan.innerHTML = `<strong>${usernameGlobal}</strong>: ${isi}`;
+    document.getElementById("daftarPesan").appendChild(pesan);
+    document.getElementById("balasPesan").value = "";
+  }
+</script></body>
 </html>
