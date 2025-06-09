@@ -1,13 +1,15 @@
 <!DOCTYPE html><html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Web Nopal</title>
+  <title>Media Sosial NOPAL</title>
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f0f2f5;
+      max-width: 480px;
+      margin: auto;
     }
     header {
       background-color: #4267B2;
@@ -15,13 +17,15 @@
       padding: 15px 20px;
       font-size: 22px;
       font-weight: bold;
+      text-align: center;
     }
     nav {
       background-color: #fff;
       border-bottom: 1px solid #ddd;
       display: flex;
       justify-content: center;
-      gap: 20px;
+      gap: 10px;
+      flex-wrap: wrap;
       padding: 10px 0;
     }
     nav a {
@@ -35,10 +39,10 @@
       background-color: #e6e6e6;
     }
     .auth-container, .content {
-      max-width: 500px;
-      margin: 40px auto;
+      max-width: 480px;
+      margin: 20px auto;
       background: white;
-      padding: 20px;
+      padding: 15px;
       border-radius: 8px;
     }
     input, textarea, button {
@@ -62,7 +66,7 @@
       cursor: pointer;
       font-size: 14px;
     }
-    .post {
+    .post, .foto-item {
       background: #fff;
       padding: 15px;
       border-radius: 8px;
@@ -70,7 +74,7 @@
       margin-bottom: 15px;
       position: relative;
     }
-    .post small { color: gray; }
+    .post small, .foto-item small { color: gray; }
     .delete-btn {
       position: absolute;
       top: 10px;
@@ -82,6 +86,10 @@
       border-radius: 4px;
       cursor: pointer;
       font-size: 12px;
+    }
+    .foto-item img {
+      max-width: 100%;
+      margin-top: 10px;
     }
     #navbar-section { display: none; }
   </style>
@@ -108,7 +116,7 @@
 </div><div class="content" id="profil-section" style="display:none;">
   <h3>Profil Pengguna</h3>
   <input type="file" accept="image/*" onchange="uploadFotoProfil(event)">
-  <img id="fotoProfil" src="" style="max-width:100%; margin-top:10px; display:none;">
+  <div id="galeriFoto"></div>
 </div><div class="content" id="pesan-section" style="display:none;">
   <h3>Pesan</h3>
   <textarea id="balasPesan" placeholder="Tulis balasan pesan..."></textarea>
@@ -133,9 +141,7 @@
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
     if (!username || !email || !password) return alert("Isi semua kolom.");
-
     const user = { username, email, password };
-
     if (isLogin) {
       const saved = JSON.parse(localStorage.getItem("user"));
       if (saved && saved.email === email && saved.password === password) {
@@ -156,6 +162,7 @@
     document.getElementById("navbar-section").style.display = "block";
     document.getElementById("menu-nav").style.display = "flex";
     showPage('beranda');
+    loadFotoGaleri();
   }
 
   function logout() {
@@ -197,11 +204,50 @@
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = function(e) {
-      const img = document.getElementById("fotoProfil");
-      img.src = e.target.result;
-      img.style.display = 'block';
+      const fotoId = "foto-" + Date.now();
+      const div = document.createElement("div");
+      div.className = "foto-item";
+      div.id = fotoId;
+      div.innerHTML = `
+        <button class="delete-btn" onclick="hapusFoto('${fotoId}')">Hapus</button>
+        <strong>${usernameGlobal}</strong>
+        <img src="${e.target.result}" alt="foto-profil">
+      `;
+      document.getElementById("galeriFoto").prepend(div);
+      simpanFoto(e.target.result);
     }
     reader.readAsDataURL(file);
+  }
+
+  function simpanFoto(dataUrl) {
+    const galeri = JSON.parse(localStorage.getItem("galeri")) || [];
+    galeri.unshift({ pemilik: usernameGlobal, foto: dataUrl, id: Date.now() });
+    localStorage.setItem("galeri", JSON.stringify(galeri));
+  }
+
+  function loadFotoGaleri() {
+    const galeri = JSON.parse(localStorage.getItem("galeri")) || [];
+    const kontainer = document.getElementById("galeriFoto");
+    kontainer.innerHTML = "";
+    galeri.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "foto-item";
+      div.id = "foto-" + item.id;
+      div.innerHTML = `
+        ${item.pemilik === usernameGlobal ? `<button class='delete-btn' onclick='hapusFoto("foto-${item.id}", ${item.id})'>Hapus</button>` : ""}
+        <strong>${item.pemilik}</strong>
+        <img src="${item.foto}" alt="foto">
+      `;
+      kontainer.appendChild(div);
+    });
+  }
+
+  function hapusFoto(elemenId, idAsli) {
+    if (!confirm("Hapus foto ini?")) return;
+    const galeri = JSON.parse(localStorage.getItem("galeri")) || [];
+    const baru = galeri.filter(item => item.id !== idAsli);
+    localStorage.setItem("galeri", JSON.stringify(baru));
+    document.getElementById(elemenId).remove();
   }
 
   function cariPengguna() {
